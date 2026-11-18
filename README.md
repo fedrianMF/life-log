@@ -1,4 +1,4 @@
-# Life Log
+# Life Log II
 
 Esqueleto de una aplicación personal para registrar gastos, caminatas, pensamientos y estado diario con captura rápida y estadísticas posteriores.
 
