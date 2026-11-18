@@ -23,9 +23,7 @@ const plannedEntries = [
             </header>
 
             <section aria-labelledby="planned-entries-title">
-                <h2 id="planned-entries-title" class="h4 mb-3">
-                    Registros previstos
-                </h2>
+                <h2 id="planned-entries-title" class="h4 mb-3">Registros previstos</h2>
 
                 <div class="row g-3">
                     <div
