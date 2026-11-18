@@ -7,10 +7,10 @@
         <title inertia>{{ config('app.name', 'Life Log') }}</title>
 
         @fonts
-        @vite(['resources/js/app.js'])
-        @inertiaHead
+        @vite('resources/js/app.js')
+        <x-inertia::head />
     </head>
     <body>
-        @inertia
+        <x-inertia::app />
     </body>
 </html>

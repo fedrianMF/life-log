@@ -1,4 +1,6 @@
 <script setup>
+import { Head } from '@inertiajs/vue3';
+
 const plannedEntries = [
     { label: 'Gasto', icon: '💰' },
     { label: 'Caminata', icon: '🚶' },
@@ -8,6 +10,8 @@ const plannedEntries = [
 </script>
 
 <template>
+    <Head title="Inicio" />
+
     <main class="min-vh-100 bg-light py-5">
         <div class="container">
             <header class="mb-5">

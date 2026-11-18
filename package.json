@@ -9,6 +9,7 @@
     "dependencies": {
         "@coreui/coreui": "^5.9.1",
         "@inertiajs/vue3": "^3.11.0",
+        "@inertiajs/vite": "^3.11.0",
         "vue": "^3.5.45"
     },
     "devDependencies": {

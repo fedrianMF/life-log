@@ -1,3 +1,4 @@
+import inertia from '@inertiajs/vite';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
@@ -6,7 +7,7 @@ import { bunny } from 'laravel-vite-plugin/fonts';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: ['resources/js/app.js'],
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {
@@ -14,6 +15,7 @@ export default defineConfig({
                 }),
             ],
         }),
+        inertia(),
         vue(),
     ],
     server: {
