@@ -35,8 +35,13 @@ class GoogleController extends Controller
         abort_unless(in_array($email, config('services.google.allowed_emails'), true), 403);
 
         $user = User::updateOrCreate(
-            ['email' => $email],
-            ['name' => $googleUser->getName(), 'google_id' => $googleUser->getId()],
+            [
+                'email' => $email
+            ],
+            [
+                'name' => $googleUser->getName(),
+                'google_id' => $googleUser->getId()
+            ],
         );
 
         Auth::login($user, remember: true);
