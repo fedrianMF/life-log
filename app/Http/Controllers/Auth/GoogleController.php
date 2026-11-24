@@ -32,17 +32,20 @@ class GoogleController extends Controller
         $googleUser = Socialite::driver('google')->user();
         $email = strtolower($googleUser->getEmail());
 
+        abort_unless(($googleUser->user['email_verified'] ?? null) === true, 403);
         abort_unless(in_array($email, config('services.google.allowed_emails'), true), 403);
 
-        $user = User::updateOrCreate(
-            [
-                'email' => $email
-            ],
-            [
-                'name' => $googleUser->getName(),
-                'google_id' => $googleUser->getId()
-            ],
-        );
+        $user = User::firstOrNew(['email' => $email]);
+        $user->forceFill([
+            'name' => $googleUser->getName(),
+            'google_id' => $googleUser->getId(),
+        ]);
+
+        if (! $user->exists) {
+            $user->email_verified_at = now();
+        }
+
+        $user->save();
 
         Auth::login($user, remember: true);
         $request->session()->regenerate();
