@@ -1,56 +1,59 @@
 <script setup>
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import Icon from '../Components/Icon.vue';
+import AppLayout from '../Layouts/AppLayout.vue';
+import { Head } from '@inertiajs/vue3';
+import { cilMoodGood } from '@coreui/icons/dist/esm/free/cil-mood-good.js';
+import { cilNotes } from '@coreui/icons/dist/esm/free/cil-notes.js';
+import { cilWalk } from '@coreui/icons/dist/esm/free/cil-walk.js';
+import { cilWallet } from '@coreui/icons/dist/esm/free/cil-wallet.js';
 
-const user = usePage().props.auth.user;
+defineOptions({ layout: AppLayout });
 
 const plannedEntries = [
-    { label: 'Expense', icon: '💰' },
-    { label: 'Walk', icon: '🚶' },
-    { label: 'Thought', icon: '💭' },
-    { label: 'Daily mood', icon: '🙂' },
+    { label: 'Expense', description: 'Record a purchase', icon: cilWallet },
+    { label: 'Walk', description: 'Log time and distance', icon: cilWalk },
+    { label: 'Thought', description: 'Save what is on your mind', icon: cilNotes },
+    { label: 'Daily mood', description: 'Check in with yourself', icon: cilMoodGood },
 ];
 </script>
 
 <template>
-    <Head title="Home" />
+    <Head title="Timeline" />
 
-    <main class="min-vh-100 bg-light py-5">
-        <div class="container">
-            <header class="mb-5 d-flex justify-content-between align-items-start">
-                <div>
-                    <span class="badge bg-primary mb-3">Initial skeleton</span>
-                    <h1 class="display-5 fw-semibold">Life Log</h1>
-                    <p class="lead text-body-secondary mb-0">Hello, {{ user.name }}.</p>
-                </div>
-
-                <Link
-                    href="/logout"
-                    method="post"
-                    as="button"
-                    class="btn btn-outline-secondary btn-sm"
-                >
-                    Sign out
-                </Link>
-            </header>
-
-            <section aria-labelledby="planned-entries-title">
-                <h2 id="planned-entries-title" class="h4 mb-3">Planned entries</h2>
-
-                <div class="row g-3">
-                    <div
-                        v-for="entry in plannedEntries"
-                        :key="entry.label"
-                        class="col-12 col-sm-6 col-lg-3"
-                    >
-                        <article class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <span class="fs-2" aria-hidden="true">{{ entry.icon }}</span>
-                                <h3 class="h6 mt-3 mb-0">{{ entry.label }}</h3>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </section>
+    <section aria-labelledby="capture-title">
+        <div class="mb-3">
+            <h2 id="capture-title" class="h4 mb-1">What would you like to log?</h2>
+            <p class="text-body-secondary mb-0">Choose an entry type to get started.</p>
         </div>
-    </main>
+
+        <div class="row g-3">
+            <div
+                v-for="entry in plannedEntries"
+                :key="entry.label"
+                class="col-12 col-sm-6 col-xl-3"
+            >
+                <a href="#" class="entry-card card h-100 text-decoration-none">
+                    <div class="card-body d-flex align-items-center gap-3 p-3 p-lg-4">
+                        <span class="entry-card-icon" aria-hidden="true">
+                            <Icon :icon="entry.icon" :size="28" />
+                        </span>
+                        <span>
+                            <span class="d-block fw-semibold text-body">{{ entry.label }}</span>
+                            <span class="small text-body-secondary">{{ entry.description }}</span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-empty text-center" aria-labelledby="empty-timeline-title">
+        <span class="timeline-empty-icon" aria-hidden="true">
+            <Icon :icon="cilNotes" :size="34" />
+        </span>
+        <h2 id="empty-timeline-title" class="h5 mt-3 mb-2">No entries yet</h2>
+        <p class="text-body-secondary mb-0">
+            Your expenses, walks, thoughts, and daily moods will appear here.
+        </p>
+    </section>
 </template>
