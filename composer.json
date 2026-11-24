@@ -9,6 +9,7 @@
         "php": "^8.3",
         "inertiajs/inertia-laravel": "^3.7",
         "laravel/framework": "^13.17",
+        "laravel/socialite": "^5.33",
         "laravel/tinker": "^3.0"
     },
     "require-dev": {
@@ -62,7 +63,6 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
         "pre-package-uninstall": [
