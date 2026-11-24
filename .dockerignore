@@ -7,3 +7,11 @@ storage/logs/*
 tests
 npm-debug.log
 Dockerfile
+.env.*
+!.env.example
+bootstrap/cache/*.php
+public/hot
+public/build
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
