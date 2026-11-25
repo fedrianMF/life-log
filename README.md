@@ -2,7 +2,7 @@
 
 Esqueleto de una aplicación personal para registrar gastos, caminatas, pensamientos y estado diario con captura rápida y estadísticas posteriores.
 
-La visión y las decisiones iniciales están en [`Docs/`](Docs/).
+Las reglas de desarrollo están en [`AGENTS.md`](AGENTS.md). Las notas técnicas están en [`Docs/`](Docs/).
 
 ## Stack
 

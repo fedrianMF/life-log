@@ -7,6 +7,23 @@
 
     <title inertia>{{ config('app.name', 'Life Log') }}</title>
 
+    <script>
+        (() => {
+            let theme = 'auto';
+
+            try {
+                theme = localStorage.getItem('life-log-theme') ?? 'auto';
+            } catch {
+                theme = 'auto';
+            }
+
+            const resolvedTheme = theme === 'auto'
+                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                : theme;
+
+            document.documentElement.setAttribute('data-coreui-theme', resolvedTheme);
+        })();
+    </script>
     @vite('resources/js/app.js')
     <x-inertia::head />
 </head>

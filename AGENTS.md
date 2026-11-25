@@ -1,74 +1,58 @@
 <project-guidelines>
-# Life Log — guía del producto
+# Life Log
 
-## Objetivo
+Personal app where Felix logs his daily activity (walks, meals with photos, exercise, expenses) from his phone. Life Log is the source of truth for that data; his personal assistant Hermes will later read it to summarize the day.
 
-Construir un registro personal unificado para capturar hechos cotidianos en menos de 15 segundos y convertirlos, con suficiente historial, en estadísticas útiles.
+Top priority: a common entry must take **under 15 seconds on a phone**.
 
-Los primeros tipos previstos son:
+These rules take precedence over the Laravel Boost guidelines below.
 
-- gastos;
-- caminatas;
-- pensamientos;
-- estado diario.
+## Commands
 
-## Prioridades
+- Tests: `php artisan test --compact` (one file: `--filter=ClassName`). Tests run on PostgreSQL (`Life-Log_testing`).
+- PHP format: `vendor/bin/pint --dirty` (CI runs `vendor/bin/pint --test`).
+- JS/Vue/CSS format: `npm run format` (CI runs `npm run format:check`).
+- Build: `npm run build`. Dev: `composer run dev`, or `php artisan serve` at `http://localhost:8000`.
+- Before finishing a task, run the tests closest to the change, Pint, `format:check` and `build`, and report anything you could not run.
 
-1. Captura rápida desde el teléfono.
-2. Privacidad, propiedad y exportación de los datos.
-3. Datos estructurados que permitan estadísticas confiables.
-4. Evolución incremental basada en uso real.
-5. Interfaz accesible, responsive y preparada para PWA.
+## Architecture
 
-## Alcance actual
-
-El repositorio es todavía un esqueleto. No implementar lógica de negocio, modelos, migraciones de dominio, autenticación, integraciones ni estadísticas sin una tarea explícita.
-
-Evitar por ahora:
-
-- constructores genéricos de formularios;
-- contabilidad de doble partida;
-- sincronización bancaria o con dispositivos;
-- GPS continuo;
-- correlaciones o recomendaciones con IA;
-- microservicios, repositorios genéricos y capas especulativas.
-
-## Arquitectura objetivo
-
-- Mantener un monolito Laravel modular y pequeño.
-- Usar Inertia para unir rutas Laravel y páginas Vue sin una API interna innecesaria.
-- Cuando se implemente el dominio, compartir un registro temporal común y mantener detalles tipados por módulo.
-- Reservar JSON solo para datos experimentales; las métricas usadas en reportes deben tener columnas explícitas.
-- Extraer una capa o servicio únicamente cuando exista una responsabilidad comprobable.
+- Small modular Laravel monolith. Inertia + Vue pages, no internal API.
+- Thin controllers + FormRequest + Policy. Named routes.
+- Events are the source of truth. Daily summaries are derived data and can always be regenerated.
+- Store timestamps in UTC. Compute the user's "day" with `config('app.user_timezone')` (America/La_Paz).
+- Money is stored as integer cents plus an ISO currency (default BOB).
+- Type-specific event fields live in `events.data` (jsonb) during the trial. Validation rules per type live in one place. Don't build generic form builders.
+- Don't add layers, repositories or services without a real, current need.
 
 ## Frontend
 
-- Usar Vue 3 Composition API.
-- Usar `@coreui/coreui` Free como sistema visual basado en clases.
-- Crear componentes Vue propios cuando aporten una interfaz estable.
-- No añadir `@coreui/vue` ni Tailwind sin una decisión explícita.
-- Para componentes complejos, priorizar teclado, foco y atributos ARIA antes que imitar solo la apariencia.
+- All UI text in English.
+- Vue 3 Composition API. CoreUI Free by CSS classes only. Do not add `@coreui/vue` or Tailwind.
+- Icons through `resources/js/Components/Icon.vue` with `@coreui/icons`. Pages use persistent layouts (`AppLayout`, `GuestLayout`).
+- Mobile-first: tap targets of at least 44px. Keyboard, focus and ARIA on interactive components.
 
-## Datos sensibles
+## Data & security
 
-- Tratar gastos, ubicación, salud y pensamientos como información privada.
-- No enviar contenido personal a servicios externos o modelos de IA por defecto.
-- No escribir contenido personal en logs, fixtures, telemetría ni mensajes de error.
-- Diseñar exportación y copias de seguridad antes de depender del sistema para datos reales.
+- The repository is **public**. Never commit secrets, real personal data or real photos.
+- Never read, modify or print `.env`. Use `.env.example` for new keys, with empty values.
+- Login is Google only (Socialite + `ALLOWED_EMAILS`). Don't reintroduce passwords.
+- `email_verified_at` is set when a user is created and never changes.
+- Every query is scoped to the authenticated user and every action is authorized with a Policy. Tests must prove a user cannot touch another user's data.
+- Photos go on the private `local` disk and are served through an authorized route, never from `public`.
+- Don't send personal data to external services or AI models. Don't log personal content.
 
-## Documentación
+## Boundaries
 
-- Mantener los documentos de `Docs/` breves, directos y actualizados.
-- Registrar decisiones confirmadas; no convertir ideas tentativas en arquitectura obligatoria.
-- Mover preguntas que requieren decisión humana a `Docs/pending.md`.
+- Ask before: adding or upgrading dependencies, changing the database schema of existing tables, or deleting files you didn't create.
+- Don't create Markdown documents unless asked.
+- Don't touch unless asked: `Dockerfile`, `docker/`, `.dockerignore`, `.github/`, queues/workers, schedulers, deploy configuration and external integrations (Hermes, WhatsApp, Google Calendar).
+- Never run `migrate:fresh`, `db:wipe` or `php artisan optimize` against the development database.
 
-## Calidad
+## Git
 
-- Revisar versiones, estructura, reglas aplicables y estado de Git antes de modificar.
-- Preservar cambios ajenos.
-- Ejecutar las pruebas más cercanas al cambio.
-- Ejecutar Pint sobre PHP modificado y el build frontend cuando las dependencias estén instaladas.
-- Declarar con precisión cualquier verificación que no pueda ejecutarse.
+- Work on a feature branch, never on `main`.
+- Never commit, push, rewrite history or merge unless Felix asks for it in writing. Leave changes uncommitted, summarize the files changed and suggest a Conventional Commits message (`feat:`, `fix:`, `docs:`, `test:`, `chore:`).
 </project-guidelines>
 
 <laravel-boost-guidelines>
@@ -163,13 +147,6 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Use TitleCase for Enum keys: `FavoritePerson`, `BestLake`, `Monthly`.
 - Prefer PHPDoc blocks over inline comments. Only add inline comments for exceptionally complex logic.
 - Use array shape type definitions in PHPDoc blocks.
-
-=== deployments rules ===
-
-# Deployment
-
-- Laravel can be deployed using [Laravel Cloud](https://cloud.laravel.com/), which is the fastest way to deploy and scale production Laravel applications.
-- Activate the `deploying-to-cloud` skill whenever deploying to Laravel Cloud, configuring Cloud environments or resources, using the Cloud CLI, or troubleshooting Cloud deployments.
 
 === laravel/core rules ===
 
