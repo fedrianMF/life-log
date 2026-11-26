@@ -17,13 +17,9 @@ These rules take precedence over the Laravel Boost guidelines below.
 
 ## Architecture
 
+- Before creating, reviewing or modifying Laravel backend code under `app/`, `routes/`, `database/` or `tests/`, you MUST read `.agents/docs/architecture.md` completely and follow it. It contains this project's evolving architecture and naming conventions and complements the Laravel guidelines below.
 - Small modular Laravel monolith. Inertia + Vue pages, no internal API.
 - Thin controllers + FormRequest + Policy. Named routes.
-- Events are the source of truth. Daily summaries are derived data and can always be regenerated.
-- Store timestamps in UTC. Compute the user's "day" with `config('app.user_timezone')` (America/La_Paz).
-- Money is stored as integer cents plus an ISO currency (default BOB).
-- Type-specific event fields live in `events.data` (jsonb) during the trial. Validation rules per type live in one place. Don't build generic form builders.
-- Don't add layers, repositories or services without a real, current need.
 
 ## Frontend
 
