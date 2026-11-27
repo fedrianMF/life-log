@@ -22,9 +22,12 @@ class HomePageTest extends TestCase
 
         $response->assertOk();
         $response->assertInertia(fn (Assert $page): Assert => $page
-            ->component('Home', false)
+            ->component('Events/Index', false)
             ->where('auth.user.name', 'Felix')
             ->where('auth.user.email', 'felix@example.com')
+            ->where('app.userTimezone', 'America/La_Paz')
+            ->has('catalogs.eventTypes', 0)
+            ->has('events.data', 0)
         );
     }
 

@@ -15,6 +15,13 @@
 - Models own relationships, casts, local invariants, and lifecycle behavior.
 - Vue pages and components own presentation behavior.
 
+## Form Requests
+
+- Each model's CRUD uses a single Form Request, named `<Model>Request`, for both create (POST) and update (PUT/PATCH). Do not create separate `Store*Request` and `Update*Request` classes.
+- Validate related data submitted with the model (nested attributes, related IDs, uploaded files) in that same request. Do not create a separate request per relation.
+- Handle the differences between create and update inside the request, based on the route-bound model: authorization, update-only rules and `after()` checks.
+- Scope related IDs to the parent model, so a request cannot reference another record's relations.
+
 ## Services
 
 - Place application services in `app/Services` and name them after the domain concept they operate on.
