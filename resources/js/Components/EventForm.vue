@@ -215,7 +215,7 @@ onBeforeUnmount(() =>
                 v-for="eventType in eventTypes"
                 :key="eventType.id"
                 type="button"
-                class="capture-type-button"
+                class="capture-type-button card"
                 @click="selectEventType(eventType)"
             >
                 <span class="event-type-icon" :class="`event-type-${eventType.slug}`">

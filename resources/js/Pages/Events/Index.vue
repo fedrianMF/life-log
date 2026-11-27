@@ -105,12 +105,12 @@ function summarizeEvent(event) {
     <template v-if="groups.length">
         <section v-for="group in groups" :key="group.date" class="timeline-day">
             <h2 class="timeline-day-heading">{{ group.label }}</h2>
-            <div class="timeline-list">
+            <div class="timeline-list card list-group list-group-flush">
                 <Link
                     v-for="event in group.events"
                     :key="event.id"
                     :href="`/events/${event.id}/edit`"
-                    class="timeline-row"
+                    class="timeline-row list-group-item list-group-item-action"
                 >
                     <span class="event-type-icon" :class="`event-type-${event.type.slug}`">
                         <Icon :icon="typeIcons[event.type.slug]" :size="24" />
@@ -145,29 +145,31 @@ function summarizeEvent(event) {
         </div>
     </template>
 
-    <section v-else class="timeline-empty" aria-labelledby="empty-title">
-        <span class="timeline-empty-icon" aria-hidden="true"
-            ><Icon :icon="cilNotes" :size="34"
-        /></span>
-        <h2 id="empty-title" class="h4 mt-3 mb-1">Start your timeline</h2>
-        <p class="text-body-secondary mb-4">
-            Choose what happened. Most entries take just a few taps.
-        </p>
-        <div class="capture-type-grid">
-            <Link
-                v-for="eventType in eventTypes"
-                :key="eventType.slug"
-                :href="`/events/create?type=${eventType.slug}`"
-                class="capture-type-button text-decoration-none"
-            >
-                <span class="event-type-icon" :class="`event-type-${eventType.slug}`">
-                    <Icon :icon="typeIcons[eventType.slug]" :size="28" />
-                </span>
-                <span>
-                    <strong>{{ eventType.name }}</strong>
-                    <small>{{ eventTypeDescriptions[eventType.slug] }}</small>
-                </span>
-            </Link>
+    <section v-else class="timeline-empty card" aria-labelledby="empty-title">
+        <div class="card-body p-4 p-sm-5">
+            <span class="timeline-empty-icon" aria-hidden="true"
+                ><Icon :icon="cilNotes" :size="34"
+            /></span>
+            <h2 id="empty-title" class="h4 mt-3 mb-1">Start your timeline</h2>
+            <p class="text-body-secondary mb-4">
+                Choose what happened. Most entries take just a few taps.
+            </p>
+            <div class="capture-type-grid">
+                <Link
+                    v-for="eventType in eventTypes"
+                    :key="eventType.slug"
+                    :href="`/events/create?type=${eventType.slug}`"
+                    class="capture-type-button card text-decoration-none"
+                >
+                    <span class="event-type-icon" :class="`event-type-${eventType.slug}`">
+                        <Icon :icon="typeIcons[eventType.slug]" :size="28" />
+                    </span>
+                    <span>
+                        <strong>{{ eventType.name }}</strong>
+                        <small>{{ eventTypeDescriptions[eventType.slug] }}</small>
+                    </span>
+                </Link>
+            </div>
         </div>
     </section>
 </template>

@@ -24,30 +24,42 @@ function deleteEvent() {
     <Head title="Edit entry" />
 
     <div class="event-form-shell">
-        <EventForm :event-types="eventTypes" :event="event" :user-timezone="userTimezone" />
+        <div class="card event-form-card">
+            <div class="card-body p-3 p-sm-4">
+                <EventForm :event-types="eventTypes" :event="event" :user-timezone="userTimezone" />
+            </div>
+        </div>
 
-        <section class="delete-entry" aria-labelledby="delete-entry-title">
-            <template v-if="!isConfirmingDelete">
-                <button
-                    type="button"
-                    class="btn btn-outline-danger"
-                    @click="isConfirmingDelete = true"
-                >
-                    Delete entry
-                </button>
-            </template>
-            <div v-else class="delete-confirmation">
-                <div>
-                    <h2 id="delete-entry-title" class="h6 mb-1">Delete this entry?</h2>
-                    <p class="small text-body-secondary mb-0">Its photos will also be deleted.</p>
-                </div>
-                <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-light" @click="isConfirmingDelete = false">
-                        Keep it
+        <section class="delete-entry card mt-4" aria-labelledby="delete-entry-title">
+            <div class="card-body p-3 p-sm-4">
+                <template v-if="!isConfirmingDelete">
+                    <button
+                        type="button"
+                        class="btn btn-outline-danger"
+                        @click="isConfirmingDelete = true"
+                    >
+                        Delete entry
                     </button>
-                    <button type="button" class="btn btn-danger" @click="deleteEvent">
-                        Delete
-                    </button>
+                </template>
+                <div v-else class="delete-confirmation">
+                    <div>
+                        <h2 id="delete-entry-title" class="h6 mb-1">Delete this entry?</h2>
+                        <p class="small text-body-secondary mb-0">
+                            Its photos will also be deleted.
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button
+                            type="button"
+                            class="btn btn-light"
+                            @click="isConfirmingDelete = false"
+                        >
+                            Keep it
+                        </button>
+                        <button type="button" class="btn btn-danger" @click="deleteEvent">
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

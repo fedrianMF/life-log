@@ -22,10 +22,14 @@ const selectedType = computed(
     <Head title="Capture" />
 
     <div class="event-form-shell">
-        <EventForm
-            :event-types="eventTypes"
-            :selected-type="selectedType"
-            :user-timezone="userTimezone"
-        />
+        <div class="card event-form-card">
+            <div class="card-body p-3 p-sm-4">
+                <EventForm
+                    :event-types="eventTypes"
+                    :selected-type="selectedType"
+                    :user-timezone="userTimezone"
+                />
+            </div>
+        </div>
     </div>
 </template>
