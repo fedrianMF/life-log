@@ -23,13 +23,25 @@ const theme = ref('auto');
 const user = computed(() => page.props.auth.user);
 const currentPath = computed(() => page.url.split('?')[0]);
 const isTimelineActive = computed(() => currentPath.value === '/');
+const isCaptureActive = computed(() => currentPath.value === '/events/create');
+const pageTitle = computed(() => {
+    if (isCaptureActive.value) {
+        return 'Capture';
+    }
+
+    if (/^\/events\/\d+\/edit$/.test(currentPath.value)) {
+        return 'Edit entry';
+    }
+
+    return 'Timeline';
+});
 const isSidebarExpanded = computed(() =>
     isDesktop.value ? !sidebarNarrow.value : sidebarOpen.value,
 );
 
 const navItems = [
     { label: 'Timeline', href: '/', icon: cilHome, active: isTimelineActive },
-    { label: 'Capture', href: '#', icon: cilPlus, active: computed(() => false) },
+    { label: 'Capture', href: '/events/create', icon: cilPlus, active: isCaptureActive },
     { label: 'Stats', href: '#', icon: cilChartLine, active: computed(() => false) },
 ];
 
@@ -211,7 +223,7 @@ onBeforeUnmount(() => {
                 </button>
 
                 <h1 class="h5 mb-0 ms-2 me-auto text-truncate">
-                    <slot name="title">Timeline</slot>
+                    {{ pageTitle }}
                 </h1>
 
                 <div class="header-nav align-items-center gap-1">
@@ -303,10 +315,15 @@ onBeforeUnmount(() => {
             <Icon :icon="cilHome" />
             <span>Timeline</span>
         </Link>
-        <a href="#" class="mobile-navigation-item mobile-navigation-capture">
+        <Link
+            href="/events/create"
+            class="mobile-navigation-item mobile-navigation-capture"
+            :class="{ active: isCaptureActive }"
+            :aria-current="isCaptureActive ? 'page' : undefined"
+        >
             <span class="mobile-navigation-capture-icon"><Icon :icon="cilPlus" :size="30" /></span>
             <span>Capture</span>
-        </a>
+        </Link>
         <a href="#" class="mobile-navigation-item">
             <Icon :icon="cilChartLine" />
             <span>Stats</span>
